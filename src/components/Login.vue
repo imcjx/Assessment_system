@@ -39,10 +39,28 @@
                         <i slot="prefix" class="el-input__icon el-icon-key"></i>
                     </el-input>
                 </div>
+                <button class="loginBtn">
+                    登 录
+                    <span></span>
+                </button>
+                <div class="remeberAndForget">
+                    <label class="remeberPwd" >
+                        <input type="checkbox" v-model="remeber">
+                        记住我
+                        <img :src="remeber?remeberImg1:remeberImg2" alt="">
+                    </label>
+                    <a href="mailto:850839565@qq.com?subject=忘记密码&body=邮件内容">忘记密码</a>
+                </div>
                 
             </div>
             <div class="footer">
-
+                <div class="shareLine">
+                    <span>分享到</span>
+                </div>
+                <div class="shareIcon">
+                    <img src="../assets/qqIcon.png" alt="">
+                    <img src="../assets/qZone.png" alt="">
+                </div>
             </div>
         </div>
     </div>
@@ -57,13 +75,26 @@ export default {
             username: '',
             password: '',
             veriCode: '',
+            remeber: false, //判断此时用户是否选择记住密码
+            remeberImg1: require('../assets/focus.png'), //记住密码图片
+            remeberImg2: require('../assets/onblur.png')
         }
     },
+    methods:{
+        //页面一加载，判断用户曾经是否选择记住密码
+        getStorageRemember(){
+            this.remeber=localStorage.getItem('remeber')=='true'?true:false;
+            // this.remeberImg=this.remeber?require('../assets/focus.png')
+            // :require('../assets/onblur.png');
+        },
+        changeRemeber(){}
+    },
     mounted(){
-        //加载例子效果
+        //加载粒子效果
         particlesJS('particles',particlesJson,function() {
             console.log('callback - particles.js config loaded');
         });
+        this.getStorageRemember();
     }
 };
 </script>
@@ -105,7 +136,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 15vh;
+    height: 13vh;
     padding: 3vh;
     border-bottom: 1px solid #ededed;
 }
@@ -171,4 +202,121 @@ export default {
     width: 100%;
 }
 
+.loginBtn{
+    display: block;
+    position: relative;
+    width: 80%;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 auto 8px;
+    padding: .6em 2.2em;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.loginBtn span{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: transparent;
+    border: 3px solid royalblue;
+}
+
+.loginBtn span::before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4%;
+    height: 1500%;
+    transform: translate(-50%,-50%) rotate(-70deg);
+    background-color: white;
+    transition: .3s all;
+}
+
+.loginBtn:hover span::before , .loginBtn:focus span::before{
+    transform: translate(-50%,-50%) rotate(-90deg);
+    width: 100%;
+    background:  royalblue;
+}
+
+.loginBtn:hover{
+    color: white;
+}
+
+.remeberAndForget{
+    position: relative;
+    color: #777;
+}
+
+.remeberAndForget > label{
+    position: relative;
+    margin-left: 10%;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remeberAndForget > label input{
+    margin-right: 5px;
+}
+
+.remeberAndForget > label img{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.remeberAndForget > a{
+    position: absolute;
+    right: 10%;
+    top: 0;
+    color: rgb(119,119,119);
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remeberAndForget > a:hover{
+    color: rgb(146,146,146);
+}
+
+.footer{
+    position: relative;
+}
+
+.footer > .shareLine{
+    position: relative;
+    width: 80%;
+    border-bottom: 1px solid #ededed;
+    margin: 40px auto 25px;
+}
+
+.footer > .shareLine > span{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+}
+
+.footer > .shareIcon{
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer > .shareIcon > img{
+    cursor: pointer;
+    padding: 10px 20px;
+}
+
+.footer > .shareIcon > img:hover{
+    opacity: .7;
+}
 </style>

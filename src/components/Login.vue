@@ -3,7 +3,7 @@
         <div id="particles"></div>
         <div class="wrap">
             <div class="header">
-                <div class="image"><img src="../assets/logo.png" alt="秃头"></div>
+                <div class="image"><img src="../assets/logo.png"></div>
                 <div class="title">
                     <span>军事理论</span><br>
                     <span>在线考试系统</span>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="veriCode">
                     <div class="veriCodeImg">
-                        <img src="../assets/test.png" alt="看不清？换一张">
+                        <img style="cursor:pointer;" id="code_" @click="changeCode" src="http://172.81.235.232:8080/militaryTheoryTestSystem_Web/captcha" alt="看不清？换一张">
                     </div>
                     <el-input
                         class="inputVeriCode"
@@ -39,7 +39,7 @@
                         <i slot="prefix" class="el-input__icon el-icon-key"></i>
                     </el-input>
                 </div>
-                <button class="loginBtn">
+                <button class="loginBtn" @click="login">
                     登 录
                     <span></span>
                 </button>
@@ -58,8 +58,8 @@
                     <span>分享到</span>
                 </div>
                 <div class="shareIcon">
-                    <img src="../assets/qqIcon.png" alt="">
-                    <img src="../assets/qZone.png" alt="">
+                    <img src="../assets/qqIcon.png" alt="" @click="share('qq')">
+                    <img src="../assets/qZone.png" alt="" @click="share('qq')">
                 </div>
             </div>
         </div>
@@ -87,7 +87,55 @@ export default {
             // this.remeberImg=this.remeber?require('../assets/focus.png')
             // :require('../assets/onblur.png');
         },
-        changeRemeber(){}
+        changeRemeber(){},
+        //分享到QQ或空间
+        share(type){
+            //部署到线上可以，本地不行
+            if(type=='qzone'){
+                window.open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='
+                +window.location.href+'?sharesource=qzone&title=军事理论考试系统&pics=图片地址&summary=快来考试吧');
+            }else if(type=='qq'){
+                window.open('http://connect.qq.com/widget/shareqq/index.html?url='
+                +window.location.href+'?sharesource=qzone&title=军事理论考试系统&pics=图片地址&summary=快来考试吧')
+            }
+        },
+        login(){
+            ///
+            $.ajax({
+                type: "POST", //POST?
+                url: "http://172.81.235.232:8080/militaryTheoryTestSystem_Web/login",//接口
+                data: "id="+this.username+"&pwd="+this.password+"&code="+this.veriCode,
+                cache: false,    
+                processData: false,
+                contentType: false, 
+                success: function(data){
+                    console.log(data);
+                    // let obj=eval("("+data+")");
+                    // // let obj=JSON.parse(data);
+                    // if(obj["code"]!=200){
+                    //     this.message.error('用户名或密码不正确！');
+                    // }else if(obj["code"]==200){
+                    //     this.message.success('登录成功！');
+                    //     //登录成功后保存token
+                    //     window.localStorage.setItem('token',obj["token"]);
+                    //     if(obj.add=='teacher'){
+                    //         this.$router.push('/teacher');
+                    //     }else if(obj.add=='student'){
+                    //         this.$router.push('/student');
+                    //     }else if(obj.add=='admin'){
+                    //         this.$router.push('/admin');
+                    //     }
+                    // }
+                },
+                error: function(xhr){
+                    console.log(xhr.status);
+                }
+            })
+        },
+        changeCode(){
+            console.log(1);
+            document.getElementById("code_").src="http://172.81.235.232:8080/militaryTheoryTestSystem_Web/captcha?"+Math.random();
+        }
     },
     mounted(){
         //加载粒子效果
